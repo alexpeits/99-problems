@@ -88,8 +88,8 @@
             seq)
     res))
 
-(defun my-last (seq)
-  (car (last seq)))
+;; (defun my-last (seq)
+;;   (car (last seq)))
 
 (defun my-head (seq)
   (reverse (cdr (reverse seq))))
@@ -150,8 +150,30 @@
    (list item)
    (drop seq pos)))
 
-(defun range (start stop)
+(cl-defun range (start stop &optional (inclusive t))
+  (unless (null inclusive) (setq stop (1+ stop)))
   (if (> start stop) (error "Start should be < than stop"))
   (let ((res ()))
-    (dotimes (i (- (1+ stop) start) res)
+    (dotimes (i (- stop start) res)
       (setq res (append res (list (+ i start)))))))
+
+(defun rnd-select (seq n)
+  (let ((lst seq)
+        (res ()))
+    (if (> n (my-length seq)) (error "n must be <= than length"))
+    (while (> n 0)
+      (let* ((len (my-length lst))
+            (pos (1+ (random len))))
+        (setq res (append res (list (element-at lst pos))))
+        (setq lst (remove-at lst pos))
+        (setq n (1- n))))
+    res))
+
+(defun lotto-select (n stop)
+  (rnd-select (range 1 stop) n))
+
+(defun rnd-permu (seq)
+  (let ((len (my-length seq)))
+    (rnd-select seq len)))
+
+(provide 'lists)
