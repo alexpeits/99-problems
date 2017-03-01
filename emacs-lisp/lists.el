@@ -176,4 +176,39 @@
   (let ((len (my-length seq)))
     (rnd-select seq len)))
 
+(defun combination (n seq)
+  (if (= n 1)
+      (mapcar #'list seq)
+    (let ((res ())
+          (k 0))
+      (dolist (i seq)
+        (setq k (1+ k))
+        (dolist (j `(,@(combination (1- n) (drop seq k))))
+          (setq res `(,@res ,(append (list i) j)))))
+      res)))
+
+(defun generic-sort (seq cb)
+  (if (null seq)
+      nil
+    (let* ((first (car seq))
+           (rest (drop seq 1))
+           (prim (funcall cb first))
+           (smaller (-filter #'(lambda (l) (and (not (null l)) (> prim (funcall cb l)))) rest))
+           (greater (-filter #'(lambda (l) (and (not (null l)) (<= prim (funcall cb l)))) rest)))
+      `(,@(generic-sort smaller cb) ,first ,@(generic-sort greater cb)))))
+
+(defun lsort (seq)
+  (generic-sort seq #'my-length))
+
+(defun freq (seq item cb)
+  (let ((res 0))
+    (dolist (i seq)
+      (if (= (funcall cb i) (funcall cb item)) (setq res (1+ res))))
+    res))
+
+(defun lfsort (seq)
+  (generic-sort seq #'(lambda (x) (freq seq x #'my-length))))
+
+
 (provide 'lists)
+

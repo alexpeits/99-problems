@@ -1,6 +1,7 @@
 (load-file "./lists.el")
 
 (defun is-prime (x)
+
   (let ((res (cond ((<= x 1) 0)
           ((<= x 3) 1)
           ((or (= (mod x 2) 0) (= (mod x 3) 0)) 0)
