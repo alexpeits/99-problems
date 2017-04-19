@@ -34,7 +34,7 @@ myReverse = foldl (flip (:)) []
 isPalindrome :: (Eq a) => [a] -> Bool
 isPalindrome [x, y] = x == y
 isPalindrome [x, _, z] = x == z
-isPalindrome xs = (head xs) == (last xs) && isPalindrome (init $ tail xs)
+isPalindrome xs = head xs == last xs && isPalindrome (init $ tail xs)
 
 data NestedList a = Elem a | List [NestedList a] deriving Show
 myFlatten :: NestedList a -> [a]

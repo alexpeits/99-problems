@@ -2,7 +2,7 @@ module ListsThird
   (
     myInsertAt
   , myRange
-  , rnd_selectIO
+  , rndSelectIO
   ) where
 
 import System.Random
@@ -22,14 +22,14 @@ myRange a b
   | a > b     = a : myRange (a - 1) b
   | otherwise = a : myRange (a + 1) b
 
-rnd_select :: RandomGen g => [a] -> Int -> g -> ([a], g)
-rnd_select _ 0 gen = ([], gen)
-rnd_select [] _ gen = ([], gen)
-rnd_select l count gen
-   | count == (length l) = (l, gen)
-   | otherwise           =  rnd_select (myRemove' l (k+1)) count gen'
+rndSelect :: RandomGen g => [a] -> Int -> g -> ([a], g)
+rndSelect _ 0 gen = ([], gen)
+rndSelect [] _ gen = ([], gen)
+rndSelect l count gen
+   | count == length l = (l, gen)
+   | otherwise           =  rndSelect (myRemove' l (k+1)) count gen'
                             where (k, gen') =
-                                    randomR (0, (length l) - 1) gen
+                                    randomR (0, length l - 1) gen
 
-rnd_selectIO :: [a] -> Int -> IO [a]
-rnd_selectIO l count = getStdRandom $ rnd_select l count
+rndSelectIO :: [a] -> Int -> IO [a]
+rndSelectIO l count = getStdRandom $ rndSelect l count
