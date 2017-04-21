@@ -3,6 +3,15 @@
             [ninety-nine.lists :refer :all]))
 
 (deftest test-my-last
-  (testing "Testing `my-last`"
-    (is (= nil (my-last [])))
-    (is (= 2 (my-last [1 2])))))
+  (testing "Test `my-last`"
+    (are [x y] (= x (my-last y))
+      nil []
+      :x [:x]
+      :y [:x :y]
+      [:z] [:x :y [:z]]
+
+      nil ()
+      :x '(:x)
+      :y '(:x :y)
+      '(:z) '(:x :y (:z)))))
+

@@ -38,3 +38,22 @@
 (defn palindrome?
   [lst]
   (= lst (my-reverse lst)))
+
+(defn my-flatten
+  [lst]
+  (reduce (fn [acc x]
+            (cond
+              (or (list? x) (vector? x))
+              (concat acc (my-flatten x))
+
+              :else
+              (concat acc (list x))))
+          '() lst))
+
+(defn compress
+  [lst]
+  (reduce (fn [acc x]
+            (if (= (last acc) x)
+              acc
+              (concat acc (list x))))
+          '() lst))
